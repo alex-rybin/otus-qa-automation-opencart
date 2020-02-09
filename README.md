@@ -1,1 +1,9 @@
-# otus-qa-automation-opencart
+# Тесты Opencart
+## Описание
+Домашние задания по тестам Opencart с помощью Selenium.
+## Установка
+Из корня репозитория выполнить команду  
+`pip install requirements.txt`
+## Запуск
+Для запуска всех тестов из корня репозитория выполнить команду:  
+`python3 -m pytest`  
