@@ -10,3 +10,7 @@ def test_elements(browser):
     browser.find_element(*SearchPage.LIST_VIEW_BUTTON)
     browser.find_element(*SearchPage.CATEGORY_SELECT)
     browser.find_element(*SearchPage.SEARCH_INPUT)
+    browser.find_element(*SearchPage.CART_BUTTON)
+    browser.find_element(*SearchPage.MENU)
+    browser.find_element(*SearchPage.TOP_SEARCH_BUTTON)
+    browser.find_element(*SearchPage.TOP_SEARCH_FIELD)

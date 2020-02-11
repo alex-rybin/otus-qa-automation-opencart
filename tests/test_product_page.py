@@ -22,3 +22,7 @@ def test_elements(browser, page):
     browser.find_element(*ProductPage.COMPARE_BUTTON)
     browser.find_element(*ProductPage.PRODUCT_NAME)
     browser.find_element(*ProductPage.QUANTITY_INPUT_FIELD)
+    browser.find_element(*ProductPage.CART_BUTTON)
+    browser.find_element(*ProductPage.MENU)
+    browser.find_element(*ProductPage.TOP_SEARCH_BUTTON)
+    browser.find_element(*ProductPage.TOP_SEARCH_FIELD)

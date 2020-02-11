@@ -22,3 +22,7 @@ def test_elements(browser, page):
     browser.find_element(*CatalogPage.LIST_VIEW_BUTTON)
     browser.find_element(*CatalogPage.SORT_SELECT)
     browser.find_element(*CatalogPage.ITEMS_PER_PAGE_SELECT)
+    browser.find_element(*CatalogPage.CART_BUTTON)
+    browser.find_element(*CatalogPage.MENU)
+    browser.find_element(*CatalogPage.TOP_SEARCH_BUTTON)
+    browser.find_element(*CatalogPage.TOP_SEARCH_FIELD)
