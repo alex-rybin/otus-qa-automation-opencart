@@ -27,15 +27,11 @@ def browser(request):
     if selected_browser == 'firefox':
         options = webdriver.FirefoxOptions()
         options.add_argument('-headless')
-        browser = webdriver.Firefox(
-            executable_path='/usr/bin/geckodriver', options=options
-        )
+        browser = webdriver.Firefox(options=options)
     elif selected_browser == 'chrome':
         options = webdriver.ChromeOptions()
         options.add_argument('--headless')
-        browser = webdriver.Chrome(
-            executable_path='/usr/bin/chromedriver', options=options
-        )
+        browser = webdriver.Chrome(options=options)
     else:
         raise ValueError(
             f'--browser option can only be "firefox" or "chrome", received "{selected_browser}"'
