@@ -1,7 +1,7 @@
 import pytest
 from selenium import webdriver
 
-BASE_URL = 'http://localhost:7777/opencart/'
+BASE_URL = 'http://127.0.0.1/'
 
 
 def pytest_addoption(parser):
