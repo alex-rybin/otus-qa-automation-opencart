@@ -10,7 +10,7 @@ def pytest_addoption(parser):
         '--browser',
         action='store',
         default='firefox',
-        help='Browser to use. Can be "firefox" or "chrome". Default: firefox',
+        help='Browser to use. Can be firefox or chrome. Default: firefox',
     )
     parser.addoption(
         '-U',
@@ -18,6 +18,14 @@ def pytest_addoption(parser):
         action='store',
         default=BASE_URL,
         help=f'URL to open for tests. Default: {BASE_URL}',
+    )
+    parser.addoption(
+        '-T',
+        '--time',
+        action='store',
+        type=int,
+        default=0,
+        help='Time in seconds for browser to implicitly wait for elements. Default: 0',
     )
 
 
@@ -37,5 +45,6 @@ def browser(request):
             f'--browser option can only be "firefox" or "chrome", received "{selected_browser}"'
         )
     request.addfinalizer(browser.quit)
+    browser.implicitly_wait(request.config.getoption('--time'))
     browser.get(request.config.getoption('--url'))
     return browser

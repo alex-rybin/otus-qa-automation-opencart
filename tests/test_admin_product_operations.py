@@ -1,5 +1,3 @@
-from time import sleep
-
 import mysql.connector as mariadb
 import pytest
 from envparse import env
