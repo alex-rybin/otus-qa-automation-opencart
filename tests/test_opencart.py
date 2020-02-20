@@ -1,2 +1,2 @@
 def test_page(browser):
-    assert browser.current_url == 'http://localhost:7777/opencart/'
+    assert browser.current_url == 'http://127.0.0.1/'

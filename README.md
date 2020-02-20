@@ -9,4 +9,4 @@
 `python3 -m pytest`  
 Параметры запуска:  
 `-B, --browser` -- выбор браузера для запуска тестов. Можно выбрать firefox или chrome. По умолчанию firefox.  
-`-U, --url` -- ссылка на Opencart. По умолчанию http://localhost:7777/opencart/
+`-U, --url` -- ссылка на Opencart. По умолчанию http://127.0.0.1/
