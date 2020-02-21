@@ -1,5 +1,11 @@
 import pytest
+from envparse import env
 from selenium import webdriver
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.wait import WebDriverWait
+
+from pages.admin.admin_base import AdminBasePage
+from pages.admin.admin_login import AdminLoginPage
 
 BASE_URL = 'http://127.0.0.1/'
 
@@ -47,4 +53,21 @@ def browser(request):
     request.addfinalizer(browser.quit)
     browser.implicitly_wait(request.config.getoption('--time'))
     browser.get(request.config.getoption('--url'))
+    return browser
+
+
+@pytest.fixture
+def logged_admin_browser(browser):
+    """Открывает страницу входа администратора и логинится"""
+    env.read_envfile()
+    browser.get(BASE_URL + 'admin/')
+    login_field = browser.find_element(*AdminLoginPage.USERNAME_FIELD)
+    password_field = browser.find_element(*AdminLoginPage.PASSWORD_FIELD)
+    login_button = browser.find_element(*AdminLoginPage.LOGIN_BUTTON)
+    login_field.send_keys(env.str('OPENCART_LOGIN'))
+    password_field.send_keys(env.str('OPENCART_PASSWORD'))
+    login_button.click()
+    WebDriverWait(browser, 10).until(
+        EC.visibility_of_element_located(AdminBasePage.SIDE_MENU)
+    )
     return browser

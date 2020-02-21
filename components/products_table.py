@@ -36,8 +36,16 @@ class ProductsTable(BaseComponent):
                 column_index = head_cells.index(head_cell)
                 break
         if not column_index:
-            raise ValueError(f'Coudn\'t find column with name "{column_name}"')
+            raise ValueError(f'Couldn\'t find column with name "{column_name}"')
         values = []
         for row in self.body.find_elements(*self.ROW):
             values.append(row.find_elements(*self.CELL)[column_index].text)
         return values
+
+    def sort_by(self, column_name: str):
+        head_cells = self.head.find_elements(*self.CELL)
+        for head_cell in head_cells:
+            if head_cell.text == column_name:
+                head_cell.click()
+                return
+        raise ValueError(f'Couldn\'t find column with name "{column_name}"')
