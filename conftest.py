@@ -31,7 +31,7 @@ def pytest_addoption(parser):
         action='store',
         type=int,
         default=0,
-        help='Time in seconds for browser to implicitly wait for elements. Default: 0',
+        help='Time in seconds to implicitly wait for elements. Default: 0',
     )
 
 
