@@ -1,3 +1,4 @@
+"""Тесты страницы Products"""
 import pytest
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support import expected_conditions as EC
@@ -10,6 +11,7 @@ from pages.admin.admin_products import AdminProductsPage
 
 @pytest.fixture
 def product_page(logged_admin_browser):
+    """Переход на страницу Products"""
     logged_admin_browser.find_element(*AdminBasePage.CATALOG_MENU_HEAD).click()
     products_menu_link = WebDriverWait(logged_admin_browser, 1).until(
         EC.visibility_of_element_located(AdminBasePage.PRODUCTS_MENU_ELEMENT)
@@ -20,6 +22,7 @@ def product_page(logged_admin_browser):
 
 @pytest.mark.parametrize('keyword', ['ipod', 'iphone', 'samsung'])
 def test_name_filter(product_page, keyword):
+    """Проверка работы фильтра по имени товара"""
     product_page.find_element(*AdminBasePage.CATALOG_MENU_HEAD).click()
     products_menu_link = WebDriverWait(product_page, 5).until(
         EC.visibility_of_element_located(AdminBasePage.PRODUCTS_MENU_ELEMENT)
@@ -45,6 +48,7 @@ def test_name_filter(product_page, keyword):
 
 
 def test_table_quantity_sorting(product_page):
+    """ Проваерка работы сортировки по количеству товаров"""
     table = ProductsTable(
         WebDriverWait(product_page, 10).until(
             EC.visibility_of_element_located(AdminProductsPage.PRODUCT_TABLE)
@@ -65,6 +69,7 @@ def test_table_quantity_sorting(product_page):
 
 
 def test_table_model_sorting(product_page):
+    """ Проверка работы сортировки по названию модели"""
     table = ProductsTable(
         WebDriverWait(product_page, 10).until(
             EC.visibility_of_element_located(AdminProductsPage.PRODUCT_TABLE)
