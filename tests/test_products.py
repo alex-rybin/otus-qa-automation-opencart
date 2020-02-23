@@ -29,12 +29,13 @@ def test_name_filter(product_page, keyword):
     )
     products_menu_link.click()
     try:
-        name_filter = WebDriverWait(product_page, 1).until(
-            EC.visibility_of_element_located(AdminProductsPage.NAME_FILTER)
+        filter_button = WebDriverWait(product_page, 1).until(
+            EC.visibility_of_element_located(AdminProductsPage.OPEN_FILTER_BUTTON)
         )
+        filter_button.click()
     except TimeoutException:
-        product_page.find_element(*AdminProductsPage.OPEN_FILTER_BUTTON).click()
-        name_filter = product_page.find_element(*AdminProductsPage.NAME_FILTER)
+        pass
+    name_filter = product_page.find_element(*AdminProductsPage.NAME_FILTER)
     name_filter.send_keys(keyword)
     product_page.find_element(*AdminProductsPage.FILTER_BUTTON).click()
     table = ProductsTable(
