@@ -23,11 +23,6 @@ def product_page(logged_admin_browser):
 @pytest.mark.parametrize('keyword', ['ipod', 'iphone', 'samsung'])
 def test_name_filter(product_page, keyword):
     """Проверка работы фильтра по имени товара"""
-    product_page.find_element(*AdminBasePage.CATALOG_MENU_HEAD).click()
-    products_menu_link = WebDriverWait(product_page, 5).until(
-        EC.visibility_of_element_located(AdminBasePage.PRODUCTS_MENU_ELEMENT)
-    )
-    products_menu_link.click()
     try:
         filter_button = WebDriverWait(product_page, 1).until(
             EC.visibility_of_element_located(AdminProductsPage.OPEN_FILTER_BUTTON)
