@@ -1,7 +1,7 @@
 from selenium.webdriver.common.by import By
 
-from pages.base import BasePage
+from pages.store.base import StoreBasePage
 
 
-class MainPage(BasePage):
+class MainPage(StoreBasePage):
     FEATURED = (By.CSS_SELECTOR, '#content > div.row')

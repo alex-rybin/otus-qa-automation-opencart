@@ -1,9 +1,9 @@
 from selenium.webdriver.common.by import By
 
-from pages.base import BasePage
+from pages.store.base import StoreBasePage
 
 
-class ProductPage(BasePage):
+class ProductPage(StoreBasePage):
     ADD_TO_CART_BUTTON = (By.CSS_SELECTOR, '#button-cart')
     QUANTITY_INPUT_FIELD = (By.CSS_SELECTOR, '#input-quantity')
     ADD_TO_WISHLIST_BUTTON = (

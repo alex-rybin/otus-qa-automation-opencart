@@ -1,5 +1,5 @@
 from conftest import BASE_URL
-from pages.admin.admin_login import AdminLoginPage
+from pages.admin.login import AdminLoginPage
 
 
 def test_elements(browser):

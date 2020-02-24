@@ -1,9 +1,9 @@
 from selenium.webdriver.common.by import By
 
-from pages.base import BasePage
+from pages.store.base import StoreBasePage
 
 
-class SearchPage(BasePage):
+class SearchPage(StoreBasePage):
     SEARCH_INPUT = (By.CSS_SELECTOR, '#input-search')
     CATEGORY_SELECT = (By.CSS_SELECTOR, 'select[name="category_id"]')
     SEARCH_BUTTON = (By.CSS_SELECTOR, '#button-search')
