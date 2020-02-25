@@ -1,10 +1,15 @@
-from pages.main import MainPage
+from pages.store.main import MainPage
 
 
 def test_elements(browser):
     """Проверка наличия основных элементов главной страницы"""
-    browser.find_element(*MainPage.CART_BUTTON)
-    browser.find_element(*MainPage.FEATURED)
-    browser.find_element(*MainPage.MENU)
-    browser.find_element(*MainPage.TOP_SEARCH_BUTTON)
-    browser.find_element(*MainPage.TOP_SEARCH_FIELD)
+    page = MainPage(browser)
+    elements_visible = [
+        page.cart_button.is_displayed(),
+        page.featured.is_displayed(),
+        page.menu.is_displayed(),
+        page.top_search_button.is_displayed(),
+        page.top_search_field.is_displayed(),
+    ]
+    expected = [True] * 5
+    assert elements_visible == expected

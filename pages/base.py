@@ -1,4 +1,4 @@
-from selenium.webdriver.remote import webdriver
+from selenium.webdriver.remote import webdriver, webelement
 
 
 class BasePage:
