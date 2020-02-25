@@ -1,5 +1,9 @@
+from typing import List
+
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote import webelement
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.wait import WebDriverWait
 
 from pages.store.base import StoreBasePage
 
@@ -10,6 +14,7 @@ class SearchPage(StoreBasePage):
     SEARCH_BUTTON = (By.CSS_SELECTOR, '#button-search')
     LIST_VIEW_BUTTON = (By.CSS_SELECTOR, '#list-view')
     GRID_VIEW_BUTTON = (By.CSS_SELECTOR, '#grid-view')
+    PRODUCT_NAMES = (By.CSS_SELECTOR, '#content > .row:nth-child(8) h4')
 
     _search_input = None
     _category_select = None
@@ -46,3 +51,9 @@ class SearchPage(StoreBasePage):
         if not self._grid_view_button:
             self._grid_view_button = self.browser.find_element(*self.GRID_VIEW_BUTTON)
         return self._grid_view_button
+
+    def get_result_product_names(self) -> List[str]:
+        results = WebDriverWait(self.browser, 5).until(
+            EC.visibility_of_all_elements_located(self.PRODUCT_NAMES)
+        )
+        return [result.text for result in results]

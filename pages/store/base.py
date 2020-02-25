@@ -38,3 +38,7 @@ class StoreBasePage(BasePage):
         if not self._menu:
             self._menu = self.browser.find_element(*self.MENU)
         return self._menu
+
+    def search(self, keyword: str):
+        self.top_search_field.send_keys(keyword)
+        self.top_search_button.click()

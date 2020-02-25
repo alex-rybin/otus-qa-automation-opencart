@@ -1,4 +1,5 @@
 from conftest import BASE_URL
+from pages.store.main import MainPage
 from pages.store.search_results import SearchPage
 
 
@@ -19,3 +20,13 @@ def test_elements(browser):
     ]
     expected = [True] * 9
     assert elements_visible == expected
+
+
+def test_search(browser):
+    keyword = 'ipod'
+    browser.get(BASE_URL)
+    page = MainPage(browser)
+    page.search(keyword)
+    page = SearchPage(browser)
+    results = page.get_result_product_names()
+    assert all(keyword in result.lower() for result in results)
