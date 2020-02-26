@@ -31,3 +31,21 @@ def test_elements(browser, page):
     ]
     expected = [True] * 9
     assert elements_visible == expected
+
+
+@pytest.mark.parametrize(
+    'page',
+    [
+        'index.php?route=product/product&product_id=43',
+        'index.php?route=product/product&product_id=40',
+        'index.php?route=product/product&product_id=28',
+        'index.php?route=product/product&product_id=48',
+        'index.php?route=product/product&product_id=45',
+    ],
+)
+def test_alert_success_after_adding_to_cart(browser, page):
+    """Проверка появления сообщения о добавлении продукта в корзину"""
+    browser.get(BASE_URL + page)
+    product_page = ProductPage(browser)
+    product_page.add_to_cart_button.click()
+    assert product_page.is_success_alert_present()

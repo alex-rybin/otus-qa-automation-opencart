@@ -1,3 +1,4 @@
+from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote import webelement
 
@@ -16,6 +17,7 @@ class ProductPage(StoreBasePage):
         '#content > div:first-child button[data-original-title="Compare this Product"]',
     )
     PRODUCT_NAME = (By.CSS_SELECTOR, '#content h1')
+    ALERT_SUCCESS = (By.CSS_SELECTOR, '.alert-success')
 
     _add_to_cart_button = None
     _quantity_input_field = None
@@ -52,3 +54,10 @@ class ProductPage(StoreBasePage):
         if not self._product_name:
             self._product_name = self.browser.find_element(*self.PRODUCT_NAME)
         return self._product_name
+
+    def is_success_alert_present(self) -> bool:
+        try:
+            self.browser.find_element(*self.ALERT_SUCCESS)
+            return True
+        except NoSuchElementException:
+            return False
