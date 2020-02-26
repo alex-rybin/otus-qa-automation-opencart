@@ -1,6 +1,8 @@
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote import webelement
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.wait import WebDriverWait
 
 from pages.store.base import StoreBasePage
 
@@ -28,19 +30,25 @@ class ProductPage(StoreBasePage):
     @property
     def add_to_cart_button(self) -> webelement:
         if not self._add_to_cart_button:
-            self._add_to_cart_button = self.browser.find_element(*self.ADD_TO_CART_BUTTON)
+            self._add_to_cart_button = self.browser.find_element(
+                *self.ADD_TO_CART_BUTTON
+            )
         return self._add_to_cart_button
 
     @property
     def quantity_input_field(self) -> webelement:
         if not self._quantity_input_field:
-            self._quantity_input_field = self.browser.find_element(*self.QUANTITY_INPUT_FIELD)
+            self._quantity_input_field = self.browser.find_element(
+                *self.QUANTITY_INPUT_FIELD
+            )
         return self._quantity_input_field
 
     @property
     def add_to_wishlist(self) -> webelement:
         if not self._add_to_wishlist_button:
-            self._add_to_wishlist_button = self.browser.find_element(*self.ADD_TO_WISHLIST_BUTTON)
+            self._add_to_wishlist_button = self.browser.find_element(
+                *self.ADD_TO_WISHLIST_BUTTON
+            )
         return self._add_to_wishlist_button
 
     @property
@@ -57,7 +65,9 @@ class ProductPage(StoreBasePage):
 
     def is_success_alert_present(self) -> bool:
         try:
-            self.browser.find_element(*self.ALERT_SUCCESS)
+            WebDriverWait(self.browser, 1).until(
+                EC.visibility_of_element_located(self.ALERT_SUCCESS)
+            )
             return True
-        except NoSuchElementException:
+        except TimeoutException:
             return False
