@@ -14,6 +14,7 @@ class CatalogPage(StoreBasePage):
     GRID_VIEW_BUTTON = (By.CSS_SELECTOR, '#grid-view')
     CATEGORIES_SIDE_MENU = (By.CSS_SELECTOR, '#column-left > div:first-child')
     PRODUCT_NAMES = (By.CSS_SELECTOR, '#content > :nth-child(7) h4')
+    PRODUCT_PRICES = (By.CSS_SELECTOR, '.price')
 
     _sort_select = None
     _items_per_page_select = None
@@ -58,3 +59,10 @@ class CatalogPage(StoreBasePage):
     def get_product_names(self) -> List[str]:
         products = self.browser.find_elements(*self.PRODUCT_NAMES)
         return [product.text for product in products]
+
+    def get_product_prices(self) -> List[float]:
+        products = self.browser.find_elements(*self.PRODUCT_PRICES)
+        return [
+            float(product.text.split(maxsplit=1)[0].replace('$', '').replace(',', ''))
+            for product in products
+        ]

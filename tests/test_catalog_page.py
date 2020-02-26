@@ -41,10 +41,26 @@ def test_elements(browser, page):
         'index.php?route=product/category&path=24',
     ],
 )
-def test_price_sorting(browser, page):
+def test_name_sorting(browser, page):
     """Проверка сортировки товаров по названию в обратном порядке"""
     browser.get(BASE_URL + page)
     catalog_page = CatalogPage(browser)
     catalog_page.sort_select.select_by_visible_text('Name (Z - A)')
     products = catalog_page.get_product_names()
     assert products == sorted(products, reverse=True, key=str.casefold)
+
+
+@pytest.mark.parametrize(
+    'page',
+    [
+        'index.php?route=product/category&path=20',
+        'index.php?route=product/category&path=18',
+        'index.php?route=product/category&path=24',
+    ],
+)
+def test_price_sorting(browser, page):
+    browser.get(BASE_URL + page)
+    catalog_page = CatalogPage(browser)
+    catalog_page.sort_select.select_by_visible_text('Price (Low > High)')
+    products = catalog_page.get_product_prices()
+    assert products == sorted(products)
