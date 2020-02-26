@@ -59,6 +59,7 @@ def test_name_sorting(browser, page):
     ],
 )
 def test_price_sorting(browser, page):
+    """Проверка сортировки товаров по цене по возрастанию"""
     browser.get(BASE_URL + page)
     catalog_page = CatalogPage(browser)
     catalog_page.sort_select.select_by_visible_text('Price (Low > High)')
