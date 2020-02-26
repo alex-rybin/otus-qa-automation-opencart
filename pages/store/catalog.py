@@ -1,3 +1,5 @@
+from typing import List
+
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote import webelement
 from selenium.webdriver.support.select import Select
@@ -11,6 +13,7 @@ class CatalogPage(StoreBasePage):
     LIST_VIEW_BUTTON = (By.CSS_SELECTOR, '#list-view')
     GRID_VIEW_BUTTON = (By.CSS_SELECTOR, '#grid-view')
     CATEGORIES_SIDE_MENU = (By.CSS_SELECTOR, '#column-left > div:first-child')
+    PRODUCT_NAMES = (By.CSS_SELECTOR, '#content > :nth-child(7) h4')
 
     _sort_select = None
     _items_per_page_select = None
@@ -51,3 +54,7 @@ class CatalogPage(StoreBasePage):
                 *self.CATEGORIES_SIDE_MENU
             )
         return self._categories_side_menu
+
+    def get_product_names(self) -> List[str]:
+        products = self.browser.find_elements(*self.PRODUCT_NAMES)
+        return [product.text for product in products]

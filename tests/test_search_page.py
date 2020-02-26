@@ -1,3 +1,5 @@
+import pytest
+
 from conftest import BASE_URL
 from pages.store.main import MainPage
 from pages.store.search_results import SearchPage
@@ -22,8 +24,9 @@ def test_elements(browser):
     assert elements_visible == expected
 
 
-def test_search(browser):
-    keyword = 'ipod'
+@pytest.mark.parametrize('keyword', ['ipod', 'macbook'])
+def test_search(browser, keyword):
+    """Проверка корректности работы поиска по товарам"""
     browser.get(BASE_URL)
     page = MainPage(browser)
     page.search(keyword)

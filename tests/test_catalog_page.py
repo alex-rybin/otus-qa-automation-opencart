@@ -27,7 +27,24 @@ def test_elements(browser, page):
         catalog_page.cart_button.is_displayed(),
         catalog_page.menu.is_displayed(),
         catalog_page.top_search_button.is_displayed(),
-        catalog_page.top_search_field.is_displayed()
+        catalog_page.top_search_field.is_displayed(),
     ]
     expected = [True] * 9
     assert elements_visible == expected
+
+
+@pytest.mark.parametrize(
+    'page',
+    [
+        'index.php?route=product/category&path=20',
+        'index.php?route=product/category&path=18',
+        'index.php?route=product/category&path=24',
+    ],
+)
+def test_price_sorting(browser, page):
+    """Проверка сортировки товаров по названию в обратном порядке"""
+    browser.get(BASE_URL + page)
+    catalog_page = CatalogPage(browser)
+    catalog_page.sort_select.select_by_visible_text('Name (Z - A)')
+    products = catalog_page.get_product_names()
+    assert products == sorted(products, reverse=True, key=str.casefold)
