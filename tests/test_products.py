@@ -89,10 +89,15 @@ def test_add_product(product_page, clear_added_product):
     test_product_meta = 'autotest'
     test_product_model = 'cool test product'
     test_product_quantity = 100
+    test_product_image = '/test_data/iphone8-test.png'
     product_page.click_add_product_button()
     add_product_page = AdminAddProduct(product_page.browser)
     add_product_page.edit_product_fields(
-        test_product_name, test_product_meta, test_product_model, test_product_quantity
+        test_product_name,
+        test_product_meta,
+        test_product_model,
+        test_product_quantity,
+        test_product_image,
     )
     product_page = AdminProductsPage(add_product_page.browser)
     products = product_page.products_table.get_table()
