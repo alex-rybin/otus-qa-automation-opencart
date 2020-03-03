@@ -44,6 +44,10 @@ CLEAR_TEST_PRODUCT_STORE = '''
     DELETE FROM oc_product_to_store
     WHERE product_id = {id};
 '''
+CLEAR_TEST_PRODUCT_IMAGE = '''
+    DELETE FROM oc_product_image
+    WHERE product_id = {id};
+'''
 GET_ID_BY_MODEL = '''
     SELECT product_id FROM oc_product
     WHERE model = '{model}'
@@ -54,5 +58,6 @@ def clean_up(connection, cursor, product_id):
     cursor.execute(CLEAR_TEST_PRODUCT.format(id=product_id))
     cursor.execute(CLEAR_TEST_DESCRIPTION.format(id=product_id))
     cursor.execute(CLEAR_TEST_PRODUCT_STORE.format(id=product_id))
+    cursor.execute(CLEAR_TEST_PRODUCT_IMAGE.format(id=product_id))
     connection.commit()
     connection.close()
