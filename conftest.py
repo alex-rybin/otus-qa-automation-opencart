@@ -3,6 +3,7 @@ import logging
 import pytest
 from envparse import env
 from selenium import webdriver
+from selenium.webdriver import DesiredCapabilities
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.abstract_event_listener import AbstractEventListener
 from selenium.webdriver.support.event_firing_webdriver import EventFiringWebDriver
@@ -118,6 +119,8 @@ def browser(request):
     elif selected_browser == 'chrome':
         options = webdriver.ChromeOptions()
         options.add_argument('--headless')
+        capabilities = DesiredCapabilities.CHROME
+        capabilities['loggingPrefs'] = {'browser': 'ALL'}
         logger.info('Starting Chrome')
         browser = EventFiringWebDriver(
             webdriver.Chrome(options=options), EventListener()

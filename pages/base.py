@@ -1,4 +1,5 @@
 import logging
+from typing import List
 
 from selenium.webdriver.remote import webdriver
 
@@ -9,3 +10,11 @@ class BasePage:
         self.browser = browser
         self.logger = logging.getLogger('opencart_logger')
         self.logger.info('Base page initialized')
+
+    def get_console_log(self) -> List[dict]:
+        self.logger.info('Getting browser console log')
+        if self.browser.name == 'chrome':
+            return self.browser.get_log('browser')
+        else:
+            self.logger.warning('Only Chrome supports console log collection, returning empty list')
+            return []

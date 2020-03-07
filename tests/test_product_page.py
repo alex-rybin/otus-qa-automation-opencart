@@ -31,6 +31,8 @@ def test_elements(browser, page):
     ]
     expected = [True] * 9
     assert elements_visible == expected
+    logs = product_page.get_console_log()
+    assert not logs, f'Errors from browser console: {logs}'
 
 
 @pytest.mark.parametrize(
@@ -49,6 +51,8 @@ def test_alert_success_after_adding_to_cart(browser, page):
     product_page = ProductPage(browser)
     product_page.add_to_cart_button.click()
     assert product_page.is_success_alert_present()
+    logs = product_page.get_console_log()
+    assert not logs, f'Errors from browser console: {logs}'
 
 
 @pytest.mark.parametrize(
@@ -67,3 +71,5 @@ def test_alert_success_after_adding_to_wishlist(browser, page):
     product_page = ProductPage(browser)
     product_page.add_to_wishlist.click()
     assert product_page.is_success_alert_present()
+    logs = product_page.get_console_log()
+    assert not logs, f'Errors from browser console: {logs}'

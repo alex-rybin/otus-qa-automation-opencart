@@ -15,3 +15,5 @@ def test_elements(browser):
     ]
     expected = [True] * 5
     assert elements_visible == expected
+    logs = page.get_console_log()
+    assert not logs, f'Errors from browser console: {logs}'

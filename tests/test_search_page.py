@@ -22,6 +22,8 @@ def test_elements(browser):
     ]
     expected = [True] * 9
     assert elements_visible == expected
+    logs = page.get_console_log()
+    assert not logs, f'Errors from browser console: {logs}'
 
 
 @pytest.mark.parametrize('keyword', ['ipod', 'macbook'])
@@ -33,3 +35,5 @@ def test_search(browser, keyword):
     page = SearchPage(browser)
     results = page.get_result_product_names()
     assert all(keyword in result.lower() for result in results)
+    logs = page.get_console_log()
+    assert not logs, f'Errors from browser console: {logs}'
