@@ -1,6 +1,8 @@
+import logging
+
 from selenium.webdriver.common.alert import Alert
 from selenium.webdriver.common.by import By
-from selenium.webdriver.remote import webelement
+from selenium.webdriver.remote import webelement, webdriver
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
@@ -27,24 +29,33 @@ class AdminProductsPage(AdminBasePage):
     _filter_form = None
     _products_table = None
 
+    def __init__(self, browser: webdriver):
+        super().__init__(browser=browser)
+        self.logger = logging.getLogger('opencart_logger')
+        self.logger.info('Products page initialized')
+
     @property
     def filter_button(self) -> webelement:
+        self.logger.debug('Initializing filter button')
         return self.browser.find_element(*self.OPEN_FILTER_BUTTON)
 
     @property
     def filter_form(self) -> ProductsFilter:
+        self.logger.debug('Initializing filter form')
         return ProductsFilter(
             self.browser.find_element(*self.FILTER_FORM), self.browser
         )
 
     @property
     def products_table(self) -> ProductsTable:
+        self.logger.debug('Initializing products table')
         return ProductsTable(
             self.browser.find_element(*self.PRODUCT_TABLE), self.browser
         )
 
     def sort_table_by(self, column_name: str):
         """Вызывает сортировку таблицы и ждёт перезагрузку страницы"""
+        self.logger.info(f'Sorting table by {column_name}')
         self.products_table.sort_by(column_name)
         WebDriverWait(self.browser, 5).until(
             EC.presence_of_element_located(self.PRODUCT_TABLE)
@@ -52,6 +63,7 @@ class AdminProductsPage(AdminBasePage):
 
     def click_add_product_button(self):
         """Нажимает кнопку добавления продукта и ждёт появления формы ввода данных"""
+        self.logger.info('Start adding product')
         self.browser.find_element(*self.ADD_BUTTON).click()
         WebDriverWait(self.browser, 5).until(
             EC.presence_of_element_located(AdminAddProduct.NAME_INPUT)
@@ -59,6 +71,7 @@ class AdminProductsPage(AdminBasePage):
 
     def start_product_edit(self, row: int):
         """Выбирает указанный ряд и нажимает кнопку изменения продукта"""
+        self.logger.info('Start editing product')
         self.products_table.click_cell_content(7, row)
         WebDriverWait(self.browser, 5).until(
             EC.presence_of_element_located(AdminAddProduct.NAME_INPUT)
@@ -66,6 +79,7 @@ class AdminProductsPage(AdminBasePage):
 
     def delete_products(self, *rows: int):
         """Выбирает указанные строки в таблице и нажимает кнопку удаления"""
+        self.logger.info('Start deleting product')
         for row in rows:
             self.products_table.click_cell_content(0, row)
         self.browser.find_element(*self.DELETE_BUTTON).click()
@@ -73,3 +87,4 @@ class AdminProductsPage(AdminBasePage):
         WebDriverWait(self.browser, 5).until(
             EC.presence_of_element_located(AdminProductsPage.ALERT_SUCCESS)
         )
+        self.logger.info('Products deleted')

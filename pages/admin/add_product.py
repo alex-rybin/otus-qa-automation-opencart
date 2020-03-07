@@ -1,8 +1,10 @@
+import logging
 import os
 from pathlib import Path
 
 from selenium.webdriver.common.alert import Alert
 from selenium.webdriver.common.by import By
+from selenium.webdriver.remote import webdriver
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
@@ -31,6 +33,11 @@ class AdminAddProduct(AdminBasePage):
     TEST_IMAGE = (By.CSS_SELECTOR, 'img[title="iphone8-test.p ng"]')
     SAVE_BUTTON = (By.CSS_SELECTOR, 'button[data-original-title="Save"]')
 
+    def __init__(self, browser: webdriver):
+        super().__init__(browser=browser)
+        self.logger = logging.getLogger('opencart_logger')
+        self.logger.info('Add product page initialized')
+
     def edit_product_fields(
         self,
         name: str,
@@ -40,6 +47,7 @@ class AdminAddProduct(AdminBasePage):
         image: str = None,
     ):
         """Прописывает указанные значения в поля продукта и нажимает кнопку сохранения"""
+        self.logger.info('Start editing product fields')
         name_field = self.browser.find_element(*self.NAME_INPUT)
         name_field.clear()
         name_field.send_keys(name)
@@ -77,3 +85,4 @@ class AdminAddProduct(AdminBasePage):
             )
             self.browser.find_element(*self.TEST_IMAGE).click()
         self.browser.find_element(*self.SAVE_BUTTON).click()
+        self.logger.info('Product edited')

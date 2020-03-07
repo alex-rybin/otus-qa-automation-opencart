@@ -1,7 +1,8 @@
+import logging
 from typing import List
 
 from selenium.webdriver.common.by import By
-from selenium.webdriver.remote import webelement
+from selenium.webdriver.remote import webelement, webdriver
 from selenium.webdriver.support.select import Select
 
 from pages.store.base import StoreBasePage
@@ -22,14 +23,21 @@ class CatalogPage(StoreBasePage):
     _grid_view_button = None
     _categories_side_menu = None
 
+    def __init__(self, browser: webdriver):
+        super().__init__(browser=browser)
+        self.logger = logging.getLogger('opencart_logger')
+        self.logger.info('Catalog page initialized')
+
     @property
     def sort_select(self) -> Select:
+        self.logger.debug('Initializing sort select menu')
         if not self._sort_select:
             self._sort_select = Select(self.browser.find_element(*self.SORT_SELECT))
         return self._sort_select
 
     @property
     def items_per_page_select(self) -> Select:
+        self.logger.debug('Initializing items per page menu')
         if not self._items_per_page_select:
             self._items_per_page_select = Select(
                 self.browser.find_element(*self.ITEMS_PER_PAGE_SELECT)
@@ -38,18 +46,21 @@ class CatalogPage(StoreBasePage):
 
     @property
     def list_view_button(self) -> webelement:
+        self.logger.debug('Initializing list view button')
         if not self._list_view_button:
             self._list_view_button = self.browser.find_element(*self.LIST_VIEW_BUTTON)
         return self._list_view_button
 
     @property
     def grid_view_button(self) -> webelement:
+        self.logger.debug('Initializing grid view button')
         if not self._grid_view_button:
             self._grid_view_button = self.browser.find_element(*self.GRID_VIEW_BUTTON)
         return self._grid_view_button
 
     @property
     def categories_side_menu(self) -> webelement:
+        self.logger.debug('Initializing categories side menu')
         if not self._categories_side_menu:
             self._categories_side_menu = self.browser.find_element(
                 *self.CATEGORIES_SIDE_MENU
@@ -57,10 +68,12 @@ class CatalogPage(StoreBasePage):
         return self._categories_side_menu
 
     def get_product_names(self) -> List[str]:
+        self.logger.info('Getting product names')
         products = self.browser.find_elements(*self.PRODUCT_NAMES)
         return [product.text for product in products]
 
     def get_product_prices(self) -> List[float]:
+        self.logger.info('Getting product prices')
         products = self.browser.find_elements(*self.PRODUCT_PRICES)
         return [
             float(product.text.split(maxsplit=1)[0].replace('$', '').replace(',', ''))

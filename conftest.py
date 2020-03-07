@@ -105,11 +105,6 @@ logging.basicConfig(
 logger = logging.getLogger('opencart_logger')
 
 
-def finalizer(browser: webdriver):
-    logger.info('Quit browser')
-    browser.quit()
-
-
 @pytest.fixture
 def browser(request):
     selected_browser = request.config.getoption('--browser')
@@ -131,7 +126,7 @@ def browser(request):
         raise ValueError(
             f'--browser option can only be "firefox" or "chrome", received "{selected_browser}"'
         )
-    request.addfinalizer(lambda: finalizer(browser))
+    request.addfinalizer(browser.quit)
     browser.implicitly_wait(request.config.getoption('--time'))
     browser.get(request.config.getoption('--url'))
     return browser
