@@ -1,3 +1,5 @@
+import logging
+
 import pytest
 from envparse import env
 from selenium import webdriver
@@ -36,23 +38,35 @@ def pytest_addoption(parser):
     )
 
 
+logging.basicConfig(format='[%(levelname)s] %(asctime)s: %(message)s', level=logging.INFO)
+logger = logging.getLogger('opencart_logger')
+
+
+def finalizer(browser: webdriver):
+    logger.info('Quit browser')
+    browser.quit()
+
+
 @pytest.fixture
 def browser(request):
     selected_browser = request.config.getoption('--browser')
     if selected_browser == 'firefox':
         options = webdriver.FirefoxOptions()
         options.add_argument('-headless')
+        logger.info('Starting Firefox')
         browser = webdriver.Firefox(options=options)
     elif selected_browser == 'chrome':
         options = webdriver.ChromeOptions()
         options.add_argument('--headless')
+        logger.info('Starting Chrome')
         browser = webdriver.Chrome(options=options)
     else:
         raise ValueError(
             f'--browser option can only be "firefox" or "chrome", received "{selected_browser}"'
         )
-    request.addfinalizer(browser.quit)
+    request.addfinalizer(lambda: finalizer(browser))
     browser.implicitly_wait(request.config.getoption('--time'))
+    logger.info(f'Open URL {request.config.getoption("--url")}')
     browser.get(request.config.getoption('--url'))
     return browser
 
