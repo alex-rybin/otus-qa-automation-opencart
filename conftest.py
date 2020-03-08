@@ -1,4 +1,5 @@
 import logging
+from datetime import datetime
 
 import pytest
 from envparse import env
@@ -129,10 +130,15 @@ def browser(request):
         raise ValueError(
             f'--browser option can only be "firefox" or "chrome", received "{selected_browser}"'
         )
-    request.addfinalizer(browser.quit)
     browser.implicitly_wait(request.config.getoption('--time'))
     browser.get(request.config.getoption('--url'))
-    return browser
+    failed = request.session.testsfailed
+    yield browser
+    if request.session.testsfailed > failed:
+        browser.save_screenshot(
+            f'screenshots/{datetime.now().strftime("%d-%m-%Y %H-%M-%S")}.png'
+        )
+    browser.quit()
 
 
 @pytest.fixture
