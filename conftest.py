@@ -18,9 +18,9 @@ BASE_URL = env.str('OPENCART_URL')
 
 
 class EventListener(AbstractEventListener):
-    def __init__(self):
+    def __init__(self, logger):
         super().__init__()
-        self.logger = logging.getLogger('Browser')
+        self.logger = logger
 
     def after_change_value_of(self, element, driver):
         self.logger.info(f'Changed value of {element}')
@@ -108,21 +108,27 @@ def pytest_addoption(parser):
     )
 
 
-@pytest.fixture
-def browser(request):
+@pytest.fixture(scope='session')
+def logger(request):
     logging.basicConfig(
         format='%(asctime)s %(name)s [%(levelname)s]: %(message)s',
         level=logging.INFO,
         filename=request.config.getoption('--file'),
         force=True,
     )
+    return logging.getLogger('Fixture')
+
+
+@pytest.fixture
+def browser(logger, request):
     selected_browser = request.config.getoption('--browser')
+    browser_logger = logging.getLogger('Browser')
     if selected_browser == 'firefox':
         options = webdriver.FirefoxOptions()
         options.add_argument('-headless')
         logger.info('Starting Firefox')
         browser = EventFiringWebDriver(
-            webdriver.Firefox(options=options), EventListener()
+            webdriver.Firefox(options=options), EventListener(browser_logger)
         )
     elif selected_browser == 'chrome':
         options = webdriver.ChromeOptions()
@@ -131,7 +137,7 @@ def browser(request):
         capabilities['loggingPrefs'] = {'browser': 'ALL'}
         logger.info('Starting Chrome')
         browser = EventFiringWebDriver(
-            webdriver.Chrome(options=options), EventListener()
+            webdriver.Chrome(options=options), EventListener(browser_logger)
         )
     else:
         raise ValueError(
@@ -158,6 +164,3 @@ def logged_admin_browser(browser):
         EC.visibility_of_element_located(AdminBasePage.SIDE_MENU)
     )
     return browser
-
-
-logger = logging.getLogger('Fixture')
