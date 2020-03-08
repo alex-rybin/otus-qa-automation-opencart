@@ -99,16 +99,19 @@ def pytest_addoption(parser):
         default=0,
         help='Time in seconds to implicitly wait for elements. Default: 0',
     )
-
-
-logging.basicConfig(
-    format='[%(levelname)s] %(asctime)s: %(message)s', level=logging.INFO
-)
-logger = logging.getLogger('opencart_logger')
+    parser.addoption(
+        '-F', '--file', action='store', type=str, default=None, help='Path to log file'
+    )
 
 
 @pytest.fixture
 def browser(request):
+    logging.basicConfig(
+        format='[%(levelname)s] %(asctime)s: %(message)s',
+        level=logging.INFO,
+        filename=request.config.getoption('--file'),
+        force=True,
+    )
     selected_browser = request.config.getoption('--browser')
     if selected_browser == 'firefox':
         options = webdriver.FirefoxOptions()
@@ -151,3 +154,6 @@ def logged_admin_browser(browser):
         EC.visibility_of_element_located(AdminBasePage.SIDE_MENU)
     )
     return browser
+
+
+logger = logging.getLogger('opencart_logger')
