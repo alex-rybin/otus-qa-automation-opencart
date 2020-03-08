@@ -35,7 +35,7 @@ class AdminAddProduct(AdminBasePage):
 
     def __init__(self, browser: webdriver):
         super().__init__(browser=browser)
-        self.logger = logging.getLogger('opencart_logger')
+        self.logger = logging.getLogger('AdminAddProduct')
         self.logger.info('Add product page initialized')
 
     def edit_product_fields(

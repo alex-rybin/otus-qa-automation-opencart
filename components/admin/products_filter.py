@@ -24,7 +24,7 @@ class ProductsFilter(BaseComponent):
 
     def __init__(self, container: webelement, browser: webdriver):
         super().__init__(container=container, browser=browser)
-        self.logger = logging.getLogger('opencart_logger')
+        self.logger = logging.getLogger('ProductsFilter')
         self.logger.debug('Products filter initialized')
 
     @property

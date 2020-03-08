@@ -17,7 +17,7 @@ class AdminBasePage(BasePage):
 
     def __init__(self, browser: webdriver):
         super().__init__(browser=browser)
-        self.logger = logging.getLogger('opencart_logger')
+        self.logger = logging.getLogger('AdminBasePage')
 
     @property
     def side_menu(self) -> SideMenu:

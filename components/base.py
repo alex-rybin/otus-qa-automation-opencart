@@ -8,5 +8,5 @@ class BaseComponent:
     def __init__(self, container: webelement, browser: webdriver):
         self.container = container
         self.browser = browser
-        self.logger = logging.getLogger('opencart_logger')
+        self.logger = logging.getLogger('BaseComponent')
         self.logger.debug('Base component initialized')

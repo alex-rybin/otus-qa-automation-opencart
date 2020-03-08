@@ -14,7 +14,7 @@ class SideMenu(BaseComponent):
 
     def __init__(self, container: webelement, browser: webdriver):
         super().__init__(container=container, browser=browser)
-        self.logger = logging.getLogger('opencart_logger')
+        self.logger = logging.getLogger('SideMenu')
         self.logger.debug('Side menu initialized')
 
     def _click_menu_element(self, parent: webelement, element_name: str):

@@ -8,7 +8,7 @@ class BasePage:
     """Базовый класс для описания страниц"""
     def __init__(self, browser: webdriver):
         self.browser = browser
-        self.logger = logging.getLogger('opencart_logger')
+        self.logger = logging.getLogger('BasePage')
         self.logger.info('Base page initialized')
 
     def get_console_log(self) -> List[dict]:

@@ -18,62 +18,66 @@ BASE_URL = env.str('OPENCART_URL')
 
 
 class EventListener(AbstractEventListener):
+    def __init__(self):
+        super().__init__()
+        self.logger = logging.getLogger('Browser')
+
     def after_change_value_of(self, element, driver):
-        logger.info(f'Changed value of {element}')
+        self.logger.info(f'Changed value of {element}')
 
     def after_click(self, element, driver):
-        logger.info(f'Clicked on {element}')
+        self.logger.info(f'Clicked on {element}')
 
     def after_close(self, driver):
-        logger.info(f'Closed window of {driver}')
+        self.logger.info(f'Closed window of {driver}')
 
     def after_execute_script(self, script, driver):
-        logger.info(f'Executed script: {script}')
+        self.logger.info(f'Executed script: {script}')
 
     def after_find(self, by, value, driver):
-        logger.info(f'Searched {value} by {by}')
+        self.logger.info(f'Searched {value} by {by}')
 
     def after_navigate_back(self, driver):
-        logger.info('Navigated back')
+        self.logger.info('Navigated back')
 
     def after_navigate_forward(self, driver):
-        logger.info('Navigated forward')
+        self.logger.info('Navigated forward')
 
     def after_navigate_to(self, url, driver):
-        logger.info(f'Opened URL: {url}')
+        self.logger.info(f'Opened URL: {url}')
 
     def after_quit(self, driver):
-        logger.info('Browser quit')
+        self.logger.info('Browser quit')
 
     def before_change_value_of(self, element, driver):
-        logger.info(f'Changing value of {element}')
+        self.logger.info(f'Changing value of {element}')
 
     def before_click(self, element, driver):
-        logger.info(f'Clicking on {element}')
+        self.logger.info(f'Clicking on {element}')
 
     def before_close(self, driver):
-        logger.info('Closing window')
+        self.logger.info('Closing window')
 
     def before_execute_script(self, script, driver):
-        logger.info(f'Executing script: {script}')
+        self.logger.info(f'Executing script: {script}')
 
     def before_find(self, by, value, driver):
-        logger.info(f'Searching {value} by {by}')
+        self.logger.info(f'Searching {value} by {by}')
 
     def before_navigate_back(self, driver):
-        logger.info('Navigating back')
+        self.logger.info('Navigating back')
 
     def before_navigate_forward(self, driver):
-        logger.info('Navigating forward')
+        self.logger.info('Navigating forward')
 
     def before_navigate_to(self, url, driver):
-        logger.info(f'Opening URL: {url}')
+        self.logger.info(f'Opening URL: {url}')
 
     def before_quit(self, driver):
-        logger.info('Quitting browser')
+        self.logger.info('Quitting browser')
 
     def on_exception(self, exception, driver):
-        logger.warning(f'Exception thrown: {exception}')
+        self.logger.warning(f'Exception thrown: {exception}')
 
 
 def pytest_addoption(parser):
@@ -107,7 +111,7 @@ def pytest_addoption(parser):
 @pytest.fixture
 def browser(request):
     logging.basicConfig(
-        format='[%(levelname)s] %(asctime)s: %(message)s',
+        format='%(asctime)s %(name)s [%(levelname)s]: %(message)s',
         level=logging.INFO,
         filename=request.config.getoption('--file'),
         force=True,
@@ -156,4 +160,4 @@ def logged_admin_browser(browser):
     return browser
 
 
-logger = logging.getLogger('opencart_logger')
+logger = logging.getLogger('Fixture')

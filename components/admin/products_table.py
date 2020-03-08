@@ -21,7 +21,7 @@ class ProductsTable(BaseComponent):
 
     def __init__(self, container: webelement, browser: webdriver):
         super().__init__(container=container, browser=browser)
-        self.logger = logging.getLogger('opencart_logger')
+        self.logger = logging.getLogger('ProductsTable')
         self.logger.debug('Products table initialized')
 
     @property
