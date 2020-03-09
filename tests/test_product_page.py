@@ -1,6 +1,7 @@
+from os import path
+
 import pytest
 
-from conftest import BASE_URL
 from pages.store.product import ProductPage
 
 
@@ -16,7 +17,7 @@ from pages.store.product import ProductPage
 )
 def test_elements(browser, page):
     """Проверка наличия основных элементов страницы товара"""
-    browser.get(BASE_URL + page)
+    browser.get(path.join(browser.current_url + page))
     product_page = ProductPage(browser)
     elements_visible = [
         product_page.add_to_cart_button.is_displayed(),
@@ -47,7 +48,7 @@ def test_elements(browser, page):
 )
 def test_alert_success_after_adding_to_cart(browser, page):
     """Проверка появления сообщения о добавлении продукта в корзину"""
-    browser.get(BASE_URL + page)
+    browser.get(path.join(browser.current_url + page))
     product_page = ProductPage(browser)
     product_page.add_to_cart_button.click()
     assert product_page.is_success_alert_present()
@@ -67,7 +68,7 @@ def test_alert_success_after_adding_to_cart(browser, page):
 )
 def test_alert_success_after_adding_to_wishlist(browser, page):
     """Проверка появления сообщения о добавлении товара в список желаемого"""
-    browser.get(BASE_URL + page)
+    browser.get(path.join(browser.current_url + page))
     product_page = ProductPage(browser)
     product_page.add_to_wishlist.click()
     assert product_page.is_success_alert_present()

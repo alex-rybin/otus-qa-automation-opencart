@@ -1,13 +1,12 @@
 import pytest
 
-from conftest import BASE_URL
 from pages.store.main import MainPage
 from pages.store.search_results import SearchPage
 
 
 def test_elements(browser):
     """Проверка наличия основных элементов страницы поиска"""
-    browser.get(BASE_URL + 'index.php?route=product/search&search=Mac')
+    browser.get(browser.current_url + 'index.php?route=product/search&search=Mac')
     page = SearchPage(browser)
     elements_visible = [
         page.search_button.is_displayed(),
@@ -29,7 +28,6 @@ def test_elements(browser):
 @pytest.mark.parametrize('keyword', ['ipod', 'macbook'])
 def test_search(browser, keyword):
     """Проверка корректности работы поиска по товарам"""
-    browser.get(BASE_URL)
     page = MainPage(browser)
     page.search(keyword)
     page = SearchPage(browser)
