@@ -1,5 +1,6 @@
 import logging
 from datetime import datetime
+from os import path
 
 import pytest
 from envparse import env
@@ -160,7 +161,7 @@ def browser(logger, request):
 @pytest.fixture
 def logged_admin_browser(browser):
     """Открывает страницу входа администратора и логинится"""
-    browser.get(BASE_URL + 'admin/')
+    browser.get(path.join(browser.current_url, 'admin/'))
     login_page = AdminLoginPage(browser)
     login_page.login(env.str('OPENCART_LOGIN'), env.str('OPENCART_PASSWORD'))
     WebDriverWait(browser, 10).until(
