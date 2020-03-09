@@ -4,7 +4,6 @@ from datetime import datetime
 import pytest
 from envparse import env
 from selenium import webdriver
-from selenium.webdriver import DesiredCapabilities
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.abstract_event_listener import AbstractEventListener
 from selenium.webdriver.support.event_firing_webdriver import EventFiringWebDriver
@@ -106,6 +105,13 @@ def pytest_addoption(parser):
     parser.addoption(
         '-F', '--file', action='store', type=str, default=None, help='Path to log file'
     )
+    parser.addoption(
+        '-E',
+        '--executor',
+        action='store',
+        default=env.str('DEFAULT_HUB'),
+        help='IP or domain of Selenium Hub',
+    )
 
 
 @pytest.fixture(scope='session')
@@ -122,27 +128,24 @@ def logger(request):
 @pytest.fixture
 def browser(logger, request):
     selected_browser = request.config.getoption('--browser')
-    browser_logger = logging.getLogger('Browser')
-    if selected_browser == 'firefox':
-        options = webdriver.FirefoxOptions()
-        options.add_argument('-headless')
-        logger.info('Starting Firefox')
-        browser = EventFiringWebDriver(
-            webdriver.Firefox(options=options), EventListener(browser_logger)
-        )
-    elif selected_browser == 'chrome':
-        options = webdriver.ChromeOptions()
-        options.add_argument('--headless')
-        capabilities = DesiredCapabilities.CHROME
-        capabilities['loggingPrefs'] = {'browser': 'ALL'}
-        logger.info('Starting Chrome')
-        browser = EventFiringWebDriver(
-            webdriver.Chrome(options=options), EventListener(browser_logger)
-        )
-    else:
+    if selected_browser not in ('firefox', 'chrome'):
         raise ValueError(
             f'--browser option can only be "firefox" or "chrome", received "{selected_browser}"'
         )
+    executor = request.config.getoption('--executor')
+    browser_logger = logging.getLogger('Browser')
+    logger.info(f'Starting {selected_browser.capitalize()}')
+    browser = EventFiringWebDriver(
+        webdriver.Remote(
+            command_executor=f'http://{executor}:4444/wd/hub',
+            desired_capabilities={
+                'browserName': selected_browser,
+                'loggingPrefs': {'browser': 'ALL'},
+                'acceptInsecureCerts': True,
+            },
+        ),
+        EventListener(browser_logger),
+    )
     browser.implicitly_wait(request.config.getoption('--time'))
     browser.get(request.config.getoption('--url'))
     failed = request.session.testsfailed
