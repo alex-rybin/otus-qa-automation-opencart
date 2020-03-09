@@ -127,22 +127,20 @@ def logger(request):
 
 @pytest.fixture
 def browser(logger, request):
-    selected_browser = request.config.getoption('--browser')
-    if selected_browser not in ('firefox', 'chrome'):
-        raise ValueError(
-            f'--browser option can only be "firefox" or "chrome", received "{selected_browser}"'
-        )
-    executor = request.config.getoption('--executor')
+    desired_cap = {
+        'browser': 'Firefox',
+        'browser_version': '73.0',
+        'os': 'OS X',
+        'os_version': 'Catalina',
+        'resolution': '1920x1080',
+        'name': 'Bstack-[Python] Sample Test',
+    }
     browser_logger = logging.getLogger('Browser')
-    logger.info(f'Starting {selected_browser.capitalize()}')
+    logger.info(f'Starting Firefox')
     browser = EventFiringWebDriver(
         webdriver.Remote(
-            command_executor=f'http://{executor}:4444/wd/hub',
-            desired_capabilities={
-                'browserName': selected_browser,
-                'loggingPrefs': {'browser': 'ALL'},
-                'acceptInsecureCerts': True,
-            },
+            command_executor=f'https://{env.str("BROWSERSTACK_KEY")}@hub-cloud.browserstack.com/wd/hub',
+            desired_capabilities=desired_cap,
         ),
         EventListener(browser_logger),
     )
