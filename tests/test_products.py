@@ -64,6 +64,8 @@ def test_name_filter(product_page, keyword):
     product_page.filter_form.filter_by('name', keyword)
     products = product_page.products_table.get_column_values('Product Name')
     assert all(keyword in product.lower() for product in products)
+    logs = product_page.get_console_log()
+    assert not logs, f'Errors from browser console: {logs}'
 
 
 def test_table_quantity_sorting(product_page):
@@ -73,6 +75,8 @@ def test_table_quantity_sorting(product_page):
     assert quantities  # проверка на случай, если список вернётся пустым
     quantities = [int(quantity) for quantity in quantities]
     assert quantities == sorted(quantities, reverse=True)
+    logs = product_page.get_console_log()
+    assert not logs, f'Errors from browser console: {logs}'
 
 
 def test_table_model_sorting(product_page):
@@ -81,6 +85,8 @@ def test_table_model_sorting(product_page):
     models = product_page.products_table.get_column_values('Model')
     assert models  # проверка на случай, если список вернётся пустым
     assert models == sorted(models, reverse=True, key=str.casefold)
+    logs = product_page.get_console_log()
+    assert not logs, f'Errors from browser console: {logs}'
 
 
 def test_add_product(product_page, clear_added_product):
@@ -114,6 +120,8 @@ def test_add_product(product_page, clear_added_product):
     assert added_product_found
     assert added_product_model == test_product_model
     assert int(added_product_quantity) == test_product_quantity
+    logs = product_page.get_console_log()
+    assert not logs, f'Errors from browser console: {logs}'
 
 
 def test_delete_product(add_test_product, product_page):
@@ -137,6 +145,8 @@ def test_delete_product(add_test_product, product_page):
             product_deleted = False
             break
     assert product_deleted
+    logs = product_page.get_console_log()
+    assert not logs, f'Errors from browser console: {logs}'
 
 
 def test_edit_product(add_test_product, product_page):
@@ -176,3 +186,5 @@ def test_edit_product(add_test_product, product_page):
     assert edited_product_found
     assert edited_product_model == test_product_model
     assert int(edited_product_quantity) == test_product_quantity
+    logs = product_page.get_console_log()
+    assert not logs, f'Errors from browser console: {logs}'

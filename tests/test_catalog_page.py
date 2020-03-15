@@ -31,6 +31,8 @@ def test_elements(browser, page):
     ]
     expected = [True] * 9
     assert elements_visible == expected
+    logs = catalog_page.get_console_log()
+    assert not logs, f'Errors from browser console: {logs}'
 
 
 @pytest.mark.parametrize(
@@ -48,6 +50,8 @@ def test_name_sorting(browser, page):
     catalog_page.sort_select.select_by_visible_text('Name (Z - A)')
     products = catalog_page.get_product_names()
     assert products == sorted(products, reverse=True, key=str.casefold)
+    logs = catalog_page.get_console_log()
+    assert not logs, f'Errors from browser console: {logs}'
 
 
 @pytest.mark.parametrize(
@@ -65,3 +69,5 @@ def test_price_sorting(browser, page):
     catalog_page.sort_select.select_by_visible_text('Price (Low > High)')
     products = catalog_page.get_product_prices()
     assert products == sorted(products)
+    logs = catalog_page.get_console_log()
+    assert not logs, f'Errors from browser console: {logs}'

@@ -1,7 +1,8 @@
+import logging
 from typing import List, Union
 
 from selenium.webdriver.common.by import By
-from selenium.webdriver.remote import webelement
+from selenium.webdriver.remote import webelement, webdriver
 
 from components.base import BaseComponent
 
@@ -18,23 +19,32 @@ class ProductsTable(BaseComponent):
     _head = None
     _body = None
 
+    def __init__(self, container: webelement, browser: webdriver):
+        super().__init__(container=container, browser=browser)
+        self.logger = logging.getLogger('ProductsTable')
+        self.logger.debug('Products table initialized')
+
     @property
     def head(self) -> webelement:
+        self.logger.debug('Initializing product table head')
         if not self._head:
             self._head = self.container.find_element(*self.HEAD)
         return self._head
 
     @property
     def body(self) -> webelement:
+        self.logger.debug('Initializing product table body')
         if not self._body:
             self._body = self.container.find_element(*self.BODY)
         return self._body
 
     def get_rows_count(self) -> int:
+        self.logger.info('Getting products table rows count')
         return len(self.body.find_elements(*self.ROW))
 
     def get_column_values(self, column_name: str) -> List[str]:
         """Возвращает все значения по имени столбца"""
+        self.logger.info(f'Getting values from column {column_name}')
         column_index = None
         head_cells = self.head.find_elements(*self.CELL)
         for head_cell in head_cells:
@@ -50,6 +60,7 @@ class ProductsTable(BaseComponent):
 
     def get_table(self) -> List[list]:
         """Возвращает таблицу в виде списка из списков, каждый из которых содержит элементы ряда"""
+        self.logger.info('Getting product table values')
         values = []
         rows = self.body.find_elements(*self.ROW)
         for row in rows:
@@ -59,6 +70,7 @@ class ProductsTable(BaseComponent):
 
     def sort_by(self, column_name: str):
         """Кликает по заголовку столбца для сортировки таблицы"""
+        self.logger.info(f'Sorting table by {column_name}')
         head_cells = self.head.find_elements(*self.CELL)
         for head_cell in head_cells:
             if head_cell.text == column_name:
@@ -68,6 +80,7 @@ class ProductsTable(BaseComponent):
 
     def get_cell(self, column: Union[int, str], row: int) -> webelement:
         """Возвращает указанную ячейку таблицы. Столбец можно указать числом или названием"""
+        self.logger.info(f'Getting cell number {row} from column {column}')
         if isinstance(column, str):
             head_cells = self.head.find_elements(*self.CELL)
             head_found = False
@@ -84,5 +97,6 @@ class ProductsTable(BaseComponent):
 
     def click_cell_content(self, column: Union[int, str], row: int):
         """Делает клик по элементу внутри указанной ячейки таблицы. Столбец можно указать числом или названием"""
+        self.logger.info(f'Clicking content of cell number {row} of column {column}')
         cell = self.get_cell(column, row)
         cell.find_element(*self.CHILD).click()
