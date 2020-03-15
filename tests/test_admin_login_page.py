@@ -1,10 +1,11 @@
-from conftest import BASE_URL
+from os import path
+
 from pages.admin.login import AdminLoginPage
 
 
 def test_elements(browser):
     """Проверка наличия основных элементов страницы входа администратора"""
-    browser.get(BASE_URL + 'admin/')
+    browser.get(path.join(browser.current_url, 'admin/'))
     page = AdminLoginPage(browser)
     elements_visible = [
         page.username_field.is_displayed(),

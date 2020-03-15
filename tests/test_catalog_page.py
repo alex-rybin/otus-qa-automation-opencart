@@ -1,6 +1,7 @@
+from os import path
+
 import pytest
 
-from conftest import BASE_URL
 from pages.store.catalog import CatalogPage
 
 
@@ -16,7 +17,7 @@ from pages.store.catalog import CatalogPage
 )
 def test_elements(browser, page):
     """Проверка наличия основных элементов страницы каталога"""
-    browser.get(BASE_URL + page)
+    browser.get(path.join(browser.current_url + page))
     catalog_page = CatalogPage(browser)
     elements_visible = [
         catalog_page.categories_side_menu.is_displayed(),
@@ -45,7 +46,7 @@ def test_elements(browser, page):
 )
 def test_name_sorting(browser, page):
     """Проверка сортировки товаров по названию в обратном порядке"""
-    browser.get(BASE_URL + page)
+    browser.get(path.join(browser.current_url + page))
     catalog_page = CatalogPage(browser)
     catalog_page.sort_select.select_by_visible_text('Name (Z - A)')
     products = catalog_page.get_product_names()
@@ -64,7 +65,7 @@ def test_name_sorting(browser, page):
 )
 def test_price_sorting(browser, page):
     """Проверка сортировки товаров по цене по возрастанию"""
-    browser.get(BASE_URL + page)
+    browser.get(path.join(browser.current_url + page))
     catalog_page = CatalogPage(browser)
     catalog_page.sort_select.select_by_visible_text('Price (Low > High)')
     products = catalog_page.get_product_prices()
