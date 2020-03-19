@@ -1,10 +1,13 @@
 from os import path
 
+import allure
 import pytest
 
 from pages.store.product import ProductPage
 
 
+@allure.feature('Наличие элементов страницы')
+@allure.title('Страница товара')
 @pytest.mark.parametrize(
     'page',
     [
@@ -16,7 +19,6 @@ from pages.store.product import ProductPage
     ],
 )
 def test_elements(browser, page):
-    """Проверка наличия основных элементов страницы товара"""
     browser.get(path.join(browser.current_url + page))
     product_page = ProductPage(browser)
     elements_visible = [
@@ -36,6 +38,7 @@ def test_elements(browser, page):
     assert not logs, f'Errors from browser console: {logs}'
 
 
+@allure.title('Появление сообщения о добавлении продукта в корзину')
 @pytest.mark.parametrize(
     'page',
     [
@@ -47,7 +50,6 @@ def test_elements(browser, page):
     ],
 )
 def test_alert_success_after_adding_to_cart(browser, page):
-    """Проверка появления сообщения о добавлении продукта в корзину"""
     browser.get(path.join(browser.current_url + page))
     product_page = ProductPage(browser)
     product_page.add_to_cart_button.click()
@@ -56,6 +58,8 @@ def test_alert_success_after_adding_to_cart(browser, page):
     assert not logs, f'Errors from browser console: {logs}'
 
 
+@allure.title('Появление сообщения о добавлении товара в список желаемого')
+@allure.severity(allure.severity_level.NORMAL)
 @pytest.mark.parametrize(
     'page',
     [
@@ -67,7 +71,6 @@ def test_alert_success_after_adding_to_cart(browser, page):
     ],
 )
 def test_alert_success_after_adding_to_wishlist(browser, page):
-    """Проверка появления сообщения о добавлении товара в список желаемого"""
     browser.get(path.join(browser.current_url + page))
     product_page = ProductPage(browser)
     product_page.add_to_wishlist.click()

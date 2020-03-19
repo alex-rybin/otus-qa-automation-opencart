@@ -1,5 +1,6 @@
 import logging
 
+import allure
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote import webelement, webdriver
 
@@ -52,5 +53,8 @@ class StoreBasePage(BasePage):
 
     def search(self, keyword: str):
         self.logger.info(f'Searching for {keyword}')
-        self.top_search_field.send_keys(keyword)
-        self.top_search_button.click()
+        with allure.step(f'Поиск товара {keyword}'):
+            with allure.step(f'Ввод текста в строку поиска: {keyword}'):
+                self.top_search_field.send_keys(keyword)
+            with allure.step('Нажатие кнопки поиска'):
+                self.top_search_button.click()

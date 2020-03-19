@@ -1,11 +1,14 @@
+import allure
 import pytest
 
 from pages.store.main import MainPage
 from pages.store.search_results import SearchPage
 
 
+@allure.feature('Наличие элементов страницы')
+@allure.title('Страница поиска')
+@allure.severity(allure.severity_level.CRITICAL)
 def test_elements(browser):
-    """Проверка наличия основных элементов страницы поиска"""
     browser.get(browser.current_url + 'index.php?route=product/search&search=Mac')
     page = SearchPage(browser)
     elements_visible = [
@@ -25,9 +28,10 @@ def test_elements(browser):
     assert not logs, f'Errors from browser console: {logs}'
 
 
+@allure.title('Поиск по товарам')
+@allure.severity(allure.severity_level.NORMAL)
 @pytest.mark.parametrize('keyword', ['ipod', 'macbook'])
 def test_search(browser, keyword):
-    """Проверка корректности работы поиска по товарам"""
     page = MainPage(browser)
     page.search(keyword)
     page = SearchPage(browser)

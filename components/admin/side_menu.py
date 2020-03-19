@@ -1,5 +1,6 @@
 import logging
 
+import allure
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote import webelement, webdriver
 
@@ -34,7 +35,8 @@ class SideMenu(BaseComponent):
         """Поиск в меню нужного элемента по пути, указанному в menu_path"""
         message = ' > '.join(menu_path)
         self.logger.info(f'Searching path in menu: {message}')
-        menu_path = list(menu_path)
-        sub_element = self._click_menu_element(self.container, menu_path.pop(0))
-        while len(menu_path) > 0:
-            sub_element = self._click_menu_element(sub_element, menu_path.pop(0))
+        with allure.step(f'Переход в боковом меню по пути: {message}'):
+            menu_path = list(menu_path)
+            sub_element = self._click_menu_element(self.container, menu_path.pop(0))
+            while len(menu_path) > 0:
+                sub_element = self._click_menu_element(sub_element, menu_path.pop(0))

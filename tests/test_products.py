@@ -1,4 +1,5 @@
 """Тесты страницы Products"""
+import allure
 import mysql.connector as mariadb
 import pytest
 from envparse import env
@@ -54,9 +55,10 @@ def clear_added_product():
     clean_up(db_connection, cursor, product_id)
 
 
+@allure.title('Фильтр по имени товара')
+@allure.severity(allure.severity_level.NORMAL)
 @pytest.mark.parametrize('keyword', ['ipod', 'iphone', 'samsung'])
 def test_name_filter(product_page, keyword):
-    """Проверка работы фильтра по имени товара"""
     try:
         product_page.filter_button.click()
     except ElementNotInteractableException:
@@ -68,8 +70,9 @@ def test_name_filter(product_page, keyword):
     assert not logs, f'Errors from browser console: {logs}'
 
 
+@allure.title('Сортировка по количеству товаров')
+@allure.severity(allure.severity_level.NORMAL)
 def test_table_quantity_sorting(product_page):
-    """ Проверка работы сортировки по количеству товаров"""
     product_page.sort_table_by('Quantity')
     quantities = product_page.products_table.get_column_values('Quantity')
     assert quantities  # проверка на случай, если список вернётся пустым
@@ -79,8 +82,9 @@ def test_table_quantity_sorting(product_page):
     assert not logs, f'Errors from browser console: {logs}'
 
 
+@allure.title('Сортировка по названию модели')
+@allure.severity(allure.severity_level.NORMAL)
 def test_table_model_sorting(product_page):
-    """ Проверка работы сортировки по названию модели"""
     product_page.sort_table_by('Model')
     models = product_page.products_table.get_column_values('Model')
     assert models  # проверка на случай, если список вернётся пустым
@@ -89,8 +93,9 @@ def test_table_model_sorting(product_page):
     assert not logs, f'Errors from browser console: {logs}'
 
 
+@allure.title('Добавление нового продукта')
+@allure.severity(allure.severity_level.CRITICAL)
 def test_add_product(product_page, clear_added_product):
-    """Проверка добавления продукта"""
     test_product_name = 'test product 1'
     test_product_meta = 'autotest'
     test_product_model = 'cool test product'
@@ -124,8 +129,9 @@ def test_add_product(product_page, clear_added_product):
     assert not logs, f'Errors from browser console: {logs}'
 
 
+@allure.title('Удаление продукта')
+@allure.severity(allure.severity_level.NORMAL)
 def test_delete_product(add_test_product, product_page):
-    """Проверка удаления продукта"""
     products = product_page.products_table.get_table()
     product_found = False
     row = None
@@ -149,8 +155,9 @@ def test_delete_product(add_test_product, product_page):
     assert not logs, f'Errors from browser console: {logs}'
 
 
+@allure.title('Изменение продукта')
+@allure.severity(allure.severity_level.CRITICAL)
 def test_edit_product(add_test_product, product_page):
-    """Проверка изменения продукта"""
     test_product_name = 'test product 1'
     test_product_meta = 'autotest'
     test_product_model = 'cool test product'
