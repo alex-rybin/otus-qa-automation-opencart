@@ -1,5 +1,6 @@
 import logging
 
+import allure
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote import webelement, webdriver
 
@@ -71,7 +72,10 @@ class ProductsFilter(BaseComponent):
 
     def filter_by(self, by: str, value: str):
         self.logger.info(f'Filtering by {by} with value {value}')
-        selected_filter = getattr(self, f'{by}_filter')
-        selected_filter.clear()
-        selected_filter.send_keys(value)
-        self.filter_button.click()
+        with allure.step(f'Фильтрация продуктов по параметру "{by}" со значением "{value}"'):
+            with allure.step(f'Ввод текста в фильтр'):
+                selected_filter = getattr(self, f'{by}_filter')
+                selected_filter.clear()
+                selected_filter.send_keys(value)
+            with allure.step('Нажатие кнопки применения фильтра'):
+                self.filter_button.click()

@@ -1,5 +1,6 @@
 import logging
 
+import allure
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote import webelement, webdriver
 from selenium.webdriver.support import expected_conditions as EC
@@ -69,9 +70,12 @@ class AdminLoginPage(BasePage):
     def login(self, login: str, password: str):
         """Вход в панель администратора"""
         self.logger.info('Starting login')
-        self.username_field.send_keys(login)
-        self.password_field.send_keys(password)
-        self.login_button.click()
+        with allure.step('Ввод логина администратора'):
+            self.username_field.send_keys(login)
+        with allure.step('Ввод пароля администратора'):
+            self.password_field.send_keys(password)
+        with allure.step('Нажатие кнопки входа'):
+            self.login_button.click()
         WebDriverWait(self.browser, 5).until(
             EC.visibility_of_element_located(AdminBasePage.SIDE_MENU)
         )

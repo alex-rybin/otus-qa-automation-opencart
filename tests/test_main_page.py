@@ -1,8 +1,12 @@
+import allure
+
 from pages.store.main import MainPage
 
 
+@allure.feature('Наличие элементов страницы')
+@allure.title('Главная страница')
+@allure.severity(allure.severity_level.CRITICAL)
 def test_elements(browser):
-    """Проверка наличия основных элементов главной страницы"""
     page = MainPage(browser)
     elements_visible = [
         page.cart_button.is_displayed(),

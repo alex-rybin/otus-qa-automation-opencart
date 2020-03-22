@@ -1,10 +1,14 @@
 from os import path
 
+import allure
 import pytest
 
 from pages.store.catalog import CatalogPage
 
 
+@allure.feature('Наличие элементов страницы')
+@allure.title('Каталог товаров')
+@allure.severity(allure.severity_level.CRITICAL)
 @pytest.mark.parametrize(
     'page',
     [
@@ -16,7 +20,6 @@ from pages.store.catalog import CatalogPage
     ],
 )
 def test_elements(browser, page):
-    """Проверка наличия основных элементов страницы каталога"""
     browser.get(path.join(browser.current_url + page))
     catalog_page = CatalogPage(browser)
     elements_visible = [
@@ -36,6 +39,8 @@ def test_elements(browser, page):
     assert not logs, f'Errors from browser console: {logs}'
 
 
+@allure.title('Сортировка товаров по названию в обратном порядке')
+@allure.severity(allure.severity_level.NORMAL)
 @pytest.mark.parametrize(
     'page',
     [
@@ -45,7 +50,6 @@ def test_elements(browser, page):
     ],
 )
 def test_name_sorting(browser, page):
-    """Проверка сортировки товаров по названию в обратном порядке"""
     browser.get(path.join(browser.current_url + page))
     catalog_page = CatalogPage(browser)
     catalog_page.sort_select.select_by_visible_text('Name (Z - A)')
@@ -55,6 +59,8 @@ def test_name_sorting(browser, page):
     assert not logs, f'Errors from browser console: {logs}'
 
 
+@allure.title('Сортировка товаров по цене по возрастанию')
+@allure.severity(allure.severity_level.NORMAL)
 @pytest.mark.parametrize(
     'page',
     [
@@ -64,7 +70,6 @@ def test_name_sorting(browser, page):
     ],
 )
 def test_price_sorting(browser, page):
-    """Проверка сортировки товаров по цене по возрастанию"""
     browser.get(path.join(browser.current_url + page))
     catalog_page = CatalogPage(browser)
     catalog_page.sort_select.select_by_visible_text('Price (Low > High)')

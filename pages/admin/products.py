@@ -1,5 +1,6 @@
 import logging
 
+import allure
 from selenium.webdriver.common.alert import Alert
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote import webelement, webdriver
@@ -56,7 +57,8 @@ class AdminProductsPage(AdminBasePage):
     def sort_table_by(self, column_name: str):
         """Вызывает сортировку таблицы и ждёт перезагрузку страницы"""
         self.logger.info(f'Sorting table by {column_name}')
-        self.products_table.sort_by(column_name)
+        with allure.step(f'Сортировка таблицы по колонке {column_name}'):
+            self.products_table.sort_by(column_name)
         WebDriverWait(self.browser, 5).until(
             EC.presence_of_element_located(self.PRODUCT_TABLE)
         )
@@ -64,7 +66,8 @@ class AdminProductsPage(AdminBasePage):
     def click_add_product_button(self):
         """Нажимает кнопку добавления продукта и ждёт появления формы ввода данных"""
         self.logger.info('Start adding product')
-        self.browser.find_element(*self.ADD_BUTTON).click()
+        with allure.step('Нажатие кнопки добавления товара'):
+            self.browser.find_element(*self.ADD_BUTTON).click()
         WebDriverWait(self.browser, 5).until(
             EC.presence_of_element_located(AdminAddProduct.NAME_INPUT)
         )
@@ -72,7 +75,8 @@ class AdminProductsPage(AdminBasePage):
     def start_product_edit(self, row: int):
         """Выбирает указанный ряд и нажимает кнопку изменения продукта"""
         self.logger.info('Start editing product')
-        self.products_table.click_cell_content(7, row)
+        with allure.step(f'Нажатие кнопки редактирования товара в строке {row}'):
+            self.products_table.click_cell_content(7, row)
         WebDriverWait(self.browser, 5).until(
             EC.presence_of_element_located(AdminAddProduct.NAME_INPUT)
         )
@@ -80,11 +84,15 @@ class AdminProductsPage(AdminBasePage):
     def delete_products(self, *rows: int):
         """Выбирает указанные строки в таблице и нажимает кнопку удаления"""
         self.logger.info('Start deleting product')
-        for row in rows:
-            self.products_table.click_cell_content(0, row)
-        self.browser.find_element(*self.DELETE_BUTTON).click()
-        Alert(self.browser).accept()
-        WebDriverWait(self.browser, 5).until(
-            EC.presence_of_element_located(AdminProductsPage.ALERT_SUCCESS)
-        )
+        with allure.step(f'Удаление товаров в строках {",".join([str(row) for row in rows])}'):
+            for row in rows:
+                with allure.step(f'Отметка товара в строке {row} на удаление'):
+                    self.products_table.click_cell_content(0, row)
+            with allure.step('Нажатие кнопки удаления товаров'):
+                self.browser.find_element(*self.DELETE_BUTTON).click()
+            with allure.step('Подтверждение удаления товаров'):
+                Alert(self.browser).accept()
+            WebDriverWait(self.browser, 5).until(
+                EC.presence_of_element_located(AdminProductsPage.ALERT_SUCCESS)
+            )
         self.logger.info('Products deleted')

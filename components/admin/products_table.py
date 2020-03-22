@@ -1,6 +1,7 @@
 import logging
 from typing import List, Union
 
+import allure
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote import webelement, webdriver
 
@@ -71,12 +72,14 @@ class ProductsTable(BaseComponent):
     def sort_by(self, column_name: str):
         """Кликает по заголовку столбца для сортировки таблицы"""
         self.logger.info(f'Sorting table by {column_name}')
-        head_cells = self.head.find_elements(*self.CELL)
-        for head_cell in head_cells:
-            if head_cell.text == column_name:
-                head_cell.click()
-                return
-        raise ValueError(f'Couldn\'t find column with name "{column_name}"')
+        with allure.step(f'Поиск заголовка таблицы со значением {column_name}'):
+            head_cells = self.head.find_elements(*self.CELL)
+            for head_cell in head_cells:
+                if head_cell.text == column_name:
+                    with allure.step('Клик по ячейке с найденным заголовком'):
+                        head_cell.click()
+                    return
+            raise ValueError(f'Couldn\'t find column with name "{column_name}"')
 
     def get_cell(self, column: Union[int, str], row: int) -> webelement:
         """Возвращает указанную ячейку таблицы. Столбец можно указать числом или названием"""
@@ -98,5 +101,6 @@ class ProductsTable(BaseComponent):
     def click_cell_content(self, column: Union[int, str], row: int):
         """Делает клик по элементу внутри указанной ячейки таблицы. Столбец можно указать числом или названием"""
         self.logger.info(f'Clicking content of cell number {row} of column {column}')
-        cell = self.get_cell(column, row)
-        cell.find_element(*self.CHILD).click()
+        with allure.step(f'Клик по содержимому ячейки номер {row} в колонке {column}'):
+            cell = self.get_cell(column, row)
+            cell.find_element(*self.CHILD).click()

@@ -1,10 +1,14 @@
 from os import path
 
+import allure
+
 from pages.admin.login import AdminLoginPage
 
 
+@allure.feature('Наличие элементов страницы')
+@allure.title('Вход администратора')
+@allure.severity(allure.severity_level.CRITICAL)
 def test_elements(browser):
-    """Проверка наличия основных элементов страницы входа администратора"""
     browser.get(path.join(browser.current_url, 'admin/'))
     page = AdminLoginPage(browser)
     elements_visible = [
