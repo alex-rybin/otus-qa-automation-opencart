@@ -1,4 +1,4 @@
-trap "rm -rf allure-results" HUP INT QUIT TERM
+trap "rm -rf app/allure-results" HUP INT QUIT TERM
 
 pytest --alluredir allure-results
 
