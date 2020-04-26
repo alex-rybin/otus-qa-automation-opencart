@@ -13,8 +13,8 @@ from selenium.webdriver.support.wait import WebDriverWait
 from pages.admin.base import AdminBasePage
 from pages.admin.login import AdminLoginPage
 
-env.read_envfile()
-BASE_URL = env.str('OPENCART_URL')
+env.read_envfile('.env.local')
+BASE_URL = f'http://{env.str("OPENCART_HOST")}'
 
 
 class EventListener(AbstractEventListener):

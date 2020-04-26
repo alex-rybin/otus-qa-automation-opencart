@@ -31,7 +31,7 @@ def add_test_product(request):
     db_connection = mariadb.connect(
         user=env.str('MARIADB_USER'),
         database=env.str('MARIADB_DATABASE'),
-        host=env.str('MARIADB_IP'),
+        host=f'http://{env.str("MARIADB_HOST")}',
     )
     cursor = db_connection.cursor()
     request.addfinalizer(lambda: clean_up(db_connection, cursor, 1))
@@ -47,7 +47,7 @@ def clear_added_product():
     db_connection = mariadb.connect(
         user=env.str('MARIADB_USER'),
         database=env.str('MARIADB_DATABASE'),
-        host=env.str('MARIADB_IP'),
+        host=f'http://{env.str("MARIADB_HOST")}',
     )
     cursor = db_connection.cursor()
     cursor.execute(GET_ID_BY_MODEL.format(model='cool test product'))
