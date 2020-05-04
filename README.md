@@ -2,11 +2,16 @@
 ## Описание
 Домашние задания по тестам Opencart с помощью Selenium.
 ## Установка
-Из корня репозитория выполнить команду  
-`pip install requirements.txt`
+Для работы требуется установить [Docker](https://www.docker.com/get-started) и [Docker-compose](https://docs.docker.com/compose/install/).  
+После установки скачать образы последних версий Firefox и Chrome для Selenoid:  
+`docker pull selenoid/firefox`  
+`docker pull selenoid/chrome`
 ## Запуск
-Для запуска всех тестов из корня репозитория выполнить команду:  
-`python3 -m pytest`  
-Параметры запуска:  
-`-B, --browser` -- выбор браузера для запуска тестов. Можно выбрать firefox или chrome. По умолчанию firefox.  
-`-U, --url` -- ссылка на Opencart. По умолчанию http://127.0.0.1/
+Для запуска тестов и окружения выполнить команду:  
+`docker-compose up -d`  
+
+Команда установит и запустит Opencart, Selenoid, а затем запустит тесты. Allure-отчёт с результатами тестов будет доступен по адресу http://localhost:4040.  
+Для повторного запуска тестов можно повторно запустить контейнер opencart-tests:  
+`docker container start opencart-tests`  
+Для завершения работы и удаления контейнеров выполнить:  
+`docker-compose down`

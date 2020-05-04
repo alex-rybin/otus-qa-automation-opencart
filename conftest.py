@@ -5,6 +5,7 @@ from os import path
 import pytest
 from envparse import env
 from selenium import webdriver
+from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.abstract_event_listener import AbstractEventListener
 from selenium.webdriver.support.event_firing_webdriver import EventFiringWebDriver
@@ -13,8 +14,9 @@ from selenium.webdriver.support.wait import WebDriverWait
 from pages.admin.base import AdminBasePage
 from pages.admin.login import AdminLoginPage
 
-env.read_envfile()
-BASE_URL = env.str('OPENCART_URL')
+env.read_envfile('.env.local')
+BASE_URL = f'http://{env.str("OPENCART_HOST")}'
+HEADER = (By.XPATH, '//nav[@id="top"]')
 
 
 class EventListener(AbstractEventListener):
@@ -149,12 +151,12 @@ def browser(logger, request):
     )
     browser.implicitly_wait(request.config.getoption('--time'))
     browser.get(request.config.getoption('--url'))
+    # Ожидание на случай первоначальной установки
+    WebDriverWait(browser, 100).until(EC.visibility_of_element_located(HEADER))
     failed = request.session.testsfailed
     yield browser
     if request.session.testsfailed > failed:
-        browser.save_screenshot(
-            f'screenshots/{datetime.now().strftime("%d-%m-%Y %H-%M-%S")}.png'
-        )
+        browser.save_screenshot(f'screenshots/{datetime.now().strftime("%d-%m-%Y %H-%M-%S")}.png')
     browser.quit()
 
 
@@ -164,7 +166,5 @@ def logged_admin_browser(browser):
     browser.get(path.join(browser.current_url, 'admin/'))
     login_page = AdminLoginPage(browser)
     login_page.login(env.str('OPENCART_LOGIN'), env.str('OPENCART_PASSWORD'))
-    WebDriverWait(browser, 10).until(
-        EC.visibility_of_element_located(AdminBasePage.SIDE_MENU)
-    )
+    WebDriverWait(browser, 10).until(EC.visibility_of_element_located(AdminBasePage.SIDE_MENU))
     return browser
