@@ -1,8 +1,7 @@
 import allure
 import pytest
-
-from pages.store.main import MainPage
-from pages.store.search_results import SearchPage
+from otus_qa_opencart_elements.pages.store.main import MainPage
+from otus_qa_opencart_elements.pages.store.search_results import SearchPage
 
 
 @allure.feature('Наличие элементов страницы')

@@ -2,8 +2,7 @@ from os import path
 
 import allure
 import pytest
-
-from pages.store.catalog import CatalogPage
+from otus_qa_opencart_elements.pages.store.catalog import CatalogPage
 
 
 @allure.feature('Наличие элементов страницы')

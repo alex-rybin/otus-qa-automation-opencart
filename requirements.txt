@@ -3,3 +3,4 @@ selenium==3.141.*
 envparse==0.2.*
 mysql-connector-python==8.0.*
 allure-pytest==2.8.*
+otus-qa-opencart-elements=1.0

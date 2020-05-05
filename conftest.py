@@ -4,6 +4,8 @@ from os import path
 
 import pytest
 from envparse import env
+from otus_qa_opencart_elements.pages.admin.base import AdminBasePage
+from otus_qa_opencart_elements.pages.admin.login import AdminLoginPage
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
@@ -11,8 +13,6 @@ from selenium.webdriver.support.abstract_event_listener import AbstractEventList
 from selenium.webdriver.support.event_firing_webdriver import EventFiringWebDriver
 from selenium.webdriver.support.wait import WebDriverWait
 
-from pages.admin.base import AdminBasePage
-from pages.admin.login import AdminLoginPage
 
 env.read_envfile('.env.local')
 BASE_URL = f'http://{env.str("OPENCART_HOST")}'

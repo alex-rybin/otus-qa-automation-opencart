@@ -1,8 +1,7 @@
 from os import path
 
 import allure
-
-from pages.admin.login import AdminLoginPage
+from otus_qa_opencart_elements.pages.admin.login import AdminLoginPage
 
 
 @allure.feature('Наличие элементов страницы')

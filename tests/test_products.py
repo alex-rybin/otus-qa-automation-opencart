@@ -3,12 +3,12 @@ import allure
 import mysql.connector as mariadb
 import pytest
 from envparse import env
+from otus_qa_opencart_elements.pages.admin.add_product import AdminAddProduct
+from otus_qa_opencart_elements.pages.admin.base import AdminBasePage
+from otus_qa_opencart_elements.pages.admin.products import AdminProductsPage
 from selenium.common.exceptions import ElementNotInteractableException
 
-from pages.admin.add_product import AdminAddProduct
-from pages.admin.base import AdminBasePage
-from pages.admin.products import AdminProductsPage
-from sql.commands import (
+from otus_qa_opencart_elements.sql.commands import (
     clean_up,
     ADD_TEST_PRODUCT,
     ADD_TEST_PRODUCT_DESCRIPTION,
@@ -171,10 +171,7 @@ def test_edit_product(add_test_product, product_page):
             test_product_found = True
             edit_page = AdminAddProduct(product_page.browser)
             edit_page.edit_product_fields(
-                test_product_name,
-                test_product_meta,
-                test_product_model,
-                test_product_quantity,
+                test_product_name, test_product_meta, test_product_model, test_product_quantity
             )
             break
     assert test_product_found

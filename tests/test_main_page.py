@@ -1,6 +1,5 @@
 import allure
-
-from pages.store.main import MainPage
+from otus_qa_opencart_elements.pages.store.main import MainPage
 
 
 @allure.feature('Наличие элементов страницы')
