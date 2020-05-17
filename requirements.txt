@@ -3,3 +3,5 @@ selenium==3.141.*
 envparse==0.2.*
 mysql-connector-python==8.0.*
 allure-pytest==2.8.*
+robotframework==3.2.*
+robotframework-seleniumlibrary==4.4.*
