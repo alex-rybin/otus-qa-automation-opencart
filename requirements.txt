@@ -5,3 +5,5 @@ mysql-connector-python==8.0.*
 allure-pytest==2.8.*
 robotframework==3.2.*
 robotframework-seleniumlibrary==4.4.*
+robotframework-databaselibrary==1.2.*
+dbbot-sqlalchemy==0.2

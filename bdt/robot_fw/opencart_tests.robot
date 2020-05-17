@@ -1,5 +1,6 @@
 *** Settings ***
 Library    SeleniumLibrary
+Library    DatabaseLibrary
 Test Setup    Setup
 Test Teardown    Close Browser
 
@@ -58,6 +59,23 @@ Setup
     Input Text    id:input-model    ${model}
     Click Element    xpath://button[@data-original-title="Save"]
 
+Выбрать продукт по названию
+    [Arguments]    ${name}
+    Click Element    xpath://tr[td[3 and text()="${name}"]]//input[@type="checkbox"]
+
+Удалить выбранные продукты
+    Click Element    xpath://button[@data-original-title="Delete"]
+    Handle Alert
+    Sleep    1
+
+Получить количество строк в таблице
+    ${count} =    Get Element Count    xpath://tr
+    Return From Keyword    ${count}
+
+Числа должны быть равны
+    [Arguments]    ${value1}    ${value2}
+    Should Be Equal As Numbers    ${value1}    ${value2}
+
 *** Test Cases ***
 Админка успешно открывается
     Открыть админку и войти
@@ -89,3 +107,12 @@ Setup
     Открыть страницу товаров
     Добавить новый продукт    Aaaa    BBBB    CCcc
     Таблица товаров должна содержать    Aaaa
+
+Товар удаляется
+    Открыть админку и войти
+    Открыть страницу товаров
+    ${before} =    Получить количество строк в таблице
+    Выбрать продукт по названию    Aaaa
+    Удалить выбранные продукты
+    ${after} =    Получить количество строк в таблице
+    Числа должны быть равны    ${before}    ${after + 1}
