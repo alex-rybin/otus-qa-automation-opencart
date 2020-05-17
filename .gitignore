@@ -53,6 +53,8 @@ coverage.xml
 log.html
 output.xml
 report.html
+screenshots/
+robot_results.db
 
 # Translations
 *.mo
