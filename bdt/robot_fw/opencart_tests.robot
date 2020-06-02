@@ -1,5 +1,6 @@
 *** Settings ***
 Library    SeleniumLibrary
+Library    DatabaseLibrary
 Test Setup    Setup
 Test Teardown    Close Browser
 
@@ -16,12 +17,14 @@ Setup
     ${desiredCapablities}    Create Dictionary    acceptInsecureCerts=${TRUE}
     Open Browser    http://${SERVER}/    ${BROWSER}    remote_url=${EXECUTOR_URL}    desired_capabilities=${desiredCapablities}
     Set Selenium Implicit Wait    5
+    Set Screenshot Directory    screenshots
 
 Открыть админку и войти
     Go To    http://${SERVER}/admin
     Input Text      id:input-username    ${USER}
     Input Text      id:input-password    ${PASSWORD}
     Click Button    css:button[type='submit']
+    Capture Page Screenshot
 
 Заголовок должен быть
     [Arguments]    ${title}
@@ -30,6 +33,7 @@ Setup
 Открыть страницу товаров
     Click Element    id:menu-catalog
     Click Element    link:Products
+    Capture Page Screenshot
 
 Ввести текст в фильтр по имени
     [Arguments]    ${name}
@@ -57,6 +61,25 @@ Setup
     Click Element    xpath://a[@href="#tab-data"]
     Input Text    id:input-model    ${model}
     Click Element    xpath://button[@data-original-title="Save"]
+
+Выбрать продукт по названию
+    [Arguments]    ${name}
+    Click Element    xpath://tr[td[3 and text()="${name}"]]//input[@type="checkbox"]
+    Capture Page Screenshot
+
+Удалить выбранные продукты
+    Click Element    xpath://button[@data-original-title="Delete"]
+    Handle Alert
+    Sleep    1
+    Capture Page Screenshot
+
+Получить количество строк в таблице
+    ${count} =    Get Element Count    xpath://tr
+    Return From Keyword    ${count}
+
+Числа должны быть равны
+    [Arguments]    ${value1}    ${value2}
+    Should Be Equal As Numbers    ${value1}    ${value2}
 
 *** Test Cases ***
 Админка успешно открывается
@@ -89,3 +112,12 @@ Setup
     Открыть страницу товаров
     Добавить новый продукт    Aaaa    BBBB    CCcc
     Таблица товаров должна содержать    Aaaa
+
+Товар удаляется
+    Открыть админку и войти
+    Открыть страницу товаров
+    ${before} =    Получить количество строк в таблице
+    Выбрать продукт по названию    Aaaa
+    Удалить выбранные продукты
+    ${after} =    Получить количество строк в таблице
+    Числа должны быть равны    ${before}    ${after + 1}
